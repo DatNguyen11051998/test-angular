@@ -1,0 +1,289 @@
+<div class="account-list">
+  <div class="account-list__header">
+    <button class="button-create" (click)="openAddAccount()">Thêm người dùng</button>
+    <div class="search">
+      <input type="text" [(ngModel)]="searchStr" (ngModelChange)="search()">
+    </div>
+  </div>
+  <table class="main-table">
+    <thead>
+    <tr class="table--header">
+      <th>Name</th>
+      <th>Age</th>
+      <th>City</th>
+      <th>Balance</th>
+      <th>Address</th>
+      <th style="text-align: center">Thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let account of account; let index=index">
+      <td>{{account.firstname}} {{account.lastname}}</td>
+      <td>{{account.age}}</td>
+      <td>{{account.city}}</td>
+      <td>{{account.balance}}</td>
+      <td>{{account.address}}</td>
+      <td>
+        <button class=" p-button-warning p-button p-component " (click)="openView(account)">Xem</button>
+        <button style="margin: 0 1rem" class="p-button-info p-button p-component" (click)="openEdit(account)">Sửa</button>
+        <button class=" p-button-danger p-button p-component " (click)="openDelete(account)">Xóa</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+<!--  <p-paginator [rows]="10" [totalRecords]="100"></p-paginator>-->
+  <!--  <p-paginator-->
+  <!--    [first]="getFirst * getRow"-->
+  <!--    [rows]="getRow"-->
+  <!--    [totalRecords]="account.length"-->
+  <!--    (onPageChange)="paginate($event)"-->
+  <!--  >-->
+  <!--  </p-paginator>-->
+</div>
+<p-dialog
+  class="management-add-form"
+  [header]="isCheckAddOrEdit ? 'Sửa tài khoản': 'Tạo tài khoản'"
+  [modal]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '30vw' }"
+  [(visible)]="isOpenAddOrEditAccount"
+>
+  <form [formGroup]="addUserForm" class="v-form" autocomplete="off">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label class="required" for="firstName">First Name</label>
+        <input
+          id="firstName"
+          type="text"
+          minlength="2"
+          maxlength="100"
+          placeholder="Nhập tên"
+          formControlName="firstname"
+        />
+        <div
+          *ngIf="addUserForm.get('firstname')!.invalid && (addUserForm.get('firstname')!.dirty || addUserForm.get('firstname')!.touched)"
+        >
+          <div *ngIf="addUserForm.get('firstname')?.errors?.required" class="v-form__error">
+            Trường bắt buộc nhập
+          </div>
+          <div *ngIf="addUserForm.get('firstname')?.errors?.minlength" class="v-form__error">
+            Tối thiểu 3 kí tự
+          </div>
+        </div>
+      </div>
+      <div class="p-field">
+        <label class="required" for="username">Last Name</label>
+        <input
+          type="text"
+          id="username"
+          maxlength="100"
+          name="username"
+          placeholder="Nhập tên"
+          formControlName="lastname"
+        />
+        <div
+          *ngIf="addUserForm.get('lastname')!.invalid && (addUserForm.get('lastname')!.dirty || addUserForm.get('lastname')!.touched)">
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm.get('lastname')?.errors?.required"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+      </div>
+      <div class="p-field">
+        <label class="required" for="age">Age</label>
+        <input
+          id="age"
+          type="number"
+          placeholder="Nhập tuổi"
+          formControlName="age"
+        />
+        <div *ngIf="addUserForm.get('age')!.invalid && (addUserForm.get('age')!.dirty || addUserForm.get('age')!.touched)">
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm.get('age')?.errors?.required"
+          >
+            Trường bắt buộc nhập
+          </div>
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm['controls']['age']?.errors?.min"
+          >
+            Tuổi lớn hơn 0
+          </div>
+        </div>
+      </div>
+      <div class="p-field">
+        <label class="required" for="age">Address</label>
+        <input
+          id="address"
+          type="text"
+          placeholder="Nhập địa chỉ"
+          formControlName="address"
+        />
+        <div *ngIf="addUserForm.get('address')!.invalid && addUserForm.get('address')!.dirty">
+          <small
+            class="v-form__error"
+            *ngIf="addUserForm.get('address')?.errors?.required"
+          >
+            Trường bắt buộc nhập
+          </small>
+        </div>
+      </div>
+      <div class="p-field">
+        <label class="required" for="balance">Balance</label>
+        <input
+          id="balance"
+          type="number"
+          placeholder="Nhập số dư"
+          formControlName="balance"/>
+        <div *ngIf="addUserForm.get('balance')!.invalid && addUserForm.get('balance')!.dirty">
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm.get('balance')?.errors?.required"
+          >
+            Trường bắt buộc nhập
+          </div>
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm['controls']['balance']?.errors?.min"
+          >
+            Số dư lớn hơn 0
+          </div>
+        </div>
+      </div>
+      <div class="p-field">
+        <label class="required" for="username">City</label>
+        <input
+          type="text"
+          id="city"
+          maxlength="100"
+          name="city"
+          placeholder="Nhập city"
+          formControlName="city"
+        />
+        <div
+          *ngIf="addUserForm.get('city')!.invalid && (addUserForm.get('city')!.dirty || addUserForm.get('city')!.touched)">
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm.get('city')?.errors?.required"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+      </div>
+      <div class="p-field">
+        <label class="required" for="username">Email</label>
+        <input
+          type="text"
+          id="email "
+          maxlength="100"
+          pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+          name="email"
+          placeholder="Nhập email"
+          formControlName="email"
+        />
+        <div
+          *ngIf="addUserForm.get('email')!.invalid && (addUserForm.get('email')!.dirty || addUserForm.get('email')!.touched)">
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm.get('email')?.errors?.required"
+          >
+            Trường bắt buộc nhập
+          </div>
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm.get('email')?.errors?.pattern"
+          >
+            Email không đúng định dạng
+          </div>
+        </div>
+      </div>
+      <div class="p-field">
+        <label class="required" for="username">Employer</label>
+        <input
+          type="text"
+          id="employer"
+          maxlength="100"
+          name="employer"
+          placeholder="Nhập nhân viên"
+          formControlName="employer"
+        />
+        <div
+          *ngIf="addUserForm.get('employer')!.invalid && (addUserForm.get('employer')!.dirty || addUserForm.get('employer')!.touched)">
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm.get('employer')?.errors?.required"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+      </div>
+      <div class="p-field">
+        <label class="required" for="username">Gender</label>
+        <input
+          type="text"
+          id="gender"
+          maxlength="100"
+          name="gender"
+          placeholder="Giới tính"
+          formControlName="gender"
+        />
+        <div
+          *ngIf="addUserForm.get('gender')!.invalid && (addUserForm.get('gender')!.dirty || addUserForm.get('gender')!.touched)">
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm.get('gender')?.errors?.required"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+      </div>
+      <div class="p-field">
+        <label class="required" for="username">State</label>
+        <input
+          type="text"
+          id="state"
+          maxlength="100"
+          name="state"
+          placeholder="State"
+          formControlName="state"
+        />
+        <div
+          *ngIf="addUserForm.get('state')!.invalid && (addUserForm.get('state')!.dirty || addUserForm.get('state')!.touched)">
+          <div
+            class="v-form__error"
+            *ngIf="addUserForm.get('state')?.errors?.required"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <p-footer>
+    <button
+      type="submit"
+      class="btn btn-confirm"
+      (click)="isCheckAddOrEdit ? saveEdit() : saveNew()"
+      [class.disabled]="!addUserForm.valid"
+    >Lưu
+    </button>
+    <button type="button" class="btn btn-cancel" (click)="isOpenAddOrEditAccount = false">Hủy</button>
+  </p-footer>
+</p-dialog>
+<p-dialog
+  class="management-add-form"
+  header="Thông tin chi tiết"
+  [modal]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '50vw' }"
+  [(visible)]="showModalViewUser"
+>
+  <app-view [account]="emitViewData"></app-view>
+</p-dialog>

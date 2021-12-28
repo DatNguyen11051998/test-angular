@@ -1,0 +1,128 @@
+.account-list {
+
+  &__header {
+    display: flex;
+
+    .search {
+      margin-left: 2rem;
+
+      input {
+        height: 30px;
+        border-radius: 8px;
+        width: 250px;
+        padding-left: 10px;
+        border: 1px solid darkgrey;
+
+        &:focus-visible {
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .button-create {
+    color: #ffffff;
+    background: #689F38;
+    border: 1px solid #689F38;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .main-table {
+    width: 40%;
+    margin: auto;
+    background: #F8F9FA;
+
+    tbody > tr > td {
+      padding-left: 10px;
+    }
+  }
+
+  .main-table > thead > tr > th {
+    text-align: left;
+  }
+}
+
+.btn-confirm {
+  padding: 7px 20px;
+  border-radius: 6px;
+  background-color: #45aea7;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+  width: 100px !important;
+}
+
+.table--header {
+  position: sticky;
+  top: 0;
+  background: lightgrey;
+  height: 40px;
+  z-index: 999;
+
+  th {
+    padding-left: 10px;
+  }
+}
+
+.btn-cancel {
+  padding: 7px 30px;
+  margin-left: 12px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  background-color: indianred;
+  border: 1px solid #e2e8f0;
+  min-width: 100px;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.v-form__error {
+  color: red;
+  font-size: 12px;
+}
+
+.p-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
+
+  .required {
+    margin-bottom: 0.25rem;
+  }
+
+  input {
+    height: 30px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    padding-left: 0.5rem;
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  label {
+    font-weight: 500;
+
+    &:after {
+      content: '*';
+      color: red;
+      margin-left: 5px;
+    }
+  }
+}
+
+@media screen and (max-width: 1700px) {
+  .account-list {
+    .main-table {
+      width: 70%;
+    }
+  }
+}
