@@ -104,9 +104,21 @@ export class AppComponent implements OnInit {
   }
 
   openDelete(acc: Account): void {
-    const userIndex = [...this.account].findIndex(user => user.account_number === acc.account_number);
-    this.account.splice(userIndex, 1);
-    this.messageService.add({severity: 'info', summary: 'Info', detail: 'Xóa người dùng thành công'});
+    const idAccount = createAccount({
+      _id: acc?._id
+    });
+    this.accountService.deleteAccount(idAccount)
+      .pipe(takeUntil(this.unSubscribeAll))
+      .subscribe((resp: Account[]) => {
+        console.log('test');
+        this.getAllAccount();
+        this.messageService.add({severity: 'info', summary: 'Info', detail: 'Chỉnh sửa thành công'});
+      }, (err: Error) => {
+        this.account = [];
+      });
+    // const userIndex = [...this.account].findIndex(user => user.account_number === acc.account_number);
+    // this.account.splice(userIndex, 1);
+    // this.messageService.add({severity: 'info', summary: 'Info', detail: 'Xóa người dùng thành công'});
   }
 
   saveEdit(): void {
